@@ -14,7 +14,7 @@ namespace TwitchThingy
         public CustomLabel()
         {
             OutlineForeColor = Color.Black;
-            OutlineWidth = 3;
+            OutlineWidth = 2;
         }
         public Color OutlineForeColor { get; set; }
         public float OutlineWidth { get; set; }

@@ -47,6 +47,7 @@ namespace TwitchThingy
         private void VLC()
         {
             //stuffs
+            System.Windows.Forms.MessageBox.Show("VLC button pressed.");
         }
         private void button3_Click(object sender, EventArgs e)
         {
@@ -123,23 +124,7 @@ namespace TwitchThingy
 
         private void makeLabelsTransparent()
         {
-            var pos = this.PointToScreen(label1.Location);
-            pos = pictureBox1.PointToClient(pos);
-            label1.Parent = pictureBox1;
-            label1.Location = pos;
-            label1.BackColor = Color.Transparent;
-
-            pos = this.PointToScreen(label2.Location);
-            pos = pictureBox1.PointToClient(pos);
-            label2.Parent = pictureBox1;
-            label2.Location = pos;
-            label2.BackColor = Color.Transparent;
-
-            pos = this.PointToScreen(label3.Location);
-            pos = pictureBox1.PointToClient(pos);
-            label3.Parent = pictureBox1;
-            label3.Location = pos;
-            label3.BackColor = Color.Transparent;
+            System.Drawing.Point pos;
 
             pos = this.PointToScreen(label4.Location);
             pos = pictureBox1.PointToClient(pos);
@@ -182,12 +167,17 @@ namespace TwitchThingy
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             MsgBox box = new MsgBox("Where would you like to open the stream?", "Browser", "VLC");
-            if(box.ShowDialog()==DialogResult.OK){
+            DialogResult DResult = box.ShowDialog();
+            if(DResult==DialogResult.OK){
                 browser();
+            }
+            else if (DResult == DialogResult.Yes)
+            {
+                VLC();
             }
             else
             {
-                VLC();
+                //nothing
             }
         }
     }

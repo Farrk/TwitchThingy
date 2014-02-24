@@ -36,6 +36,7 @@ namespace TwitchThingy
                         StreamContainer.streamObjects[streamToAdd].offline_status = (string)streams["follows"][i]["channel"]["status"];
                         streamsList.Items.Add(streamToAdd);
                     }
+                    streamsList.SelectedIndex = 0;
             }
             catch
             {

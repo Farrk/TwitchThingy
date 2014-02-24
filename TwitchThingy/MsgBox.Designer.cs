@@ -45,7 +45,7 @@
             // 
             // button2
             // 
-            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.button2.DialogResult = System.Windows.Forms.DialogResult.Yes;
             this.button2.Location = new System.Drawing.Point(113, 39);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(93, 23);
@@ -75,7 +75,8 @@
             this.MinimizeBox = false;
             this.Name = "MsgBox";
             this.ShowInTaskbar = false;
-            this.Text = "MsgBox";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "SLWT";
             this.ResumeLayout(false);
             this.PerformLayout();
 
