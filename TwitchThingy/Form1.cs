@@ -40,7 +40,14 @@ namespace TwitchThingy
             //web browser button
             //System.Diagnostics.Process.Start("http://twitch.tv/" + listBox1.SelectedItem.ToString());
         }
-
+        private void browser()
+        {
+            System.Diagnostics.Process.Start("http://twitch.tv/" + listBox1.SelectedItem.ToString());
+        }
+        private void VLC()
+        {
+            //stuffs
+        }
         private void button3_Click(object sender, EventArgs e)
         {
             try
@@ -170,6 +177,18 @@ namespace TwitchThingy
                 System.Windows.Forms.MessageBox.Show(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].offline_status, "Stream Title");
             }
             
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            MsgBox box = new MsgBox("Where would you like to open the stream?", "Browser", "VLC");
+            if(box.ShowDialog()==DialogResult.OK){
+                browser();
+            }
+            else
+            {
+                VLC();
+            }
         }
     }
 }

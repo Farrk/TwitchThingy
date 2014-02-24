@@ -16,10 +16,11 @@ namespace TwitchThingy
         {
             InitializeComponent();
         }
-
-        private void button3_Click(object sender, EventArgs e)
+        public MsgBox(string msg, string btn1, string btn2)
         {
-
+            label1.Text = msg;
+            button1.Text = btn1;
+            button2.Text = btn2;
         }
     }
 }
