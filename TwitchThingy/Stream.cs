@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Windows.Forms;
 
 namespace TwitchThingy
 {
@@ -23,14 +24,15 @@ namespace TwitchThingy
         public string offline_status { get; set; }
         public Stream(string channel){
             streamName = channel;
-            updater = new System.Timers.Timer(10000);
+            updater = new System.Timers.Timer(1000);
             updater.Elapsed += new ElapsedEventHandler(refreshStatus);
             updater.Enabled = true;
-            checkStatus(channel);
+            //checkStatus(channel);
             GC.KeepAlive(updater);
         }
         public void refreshStatus(object source, ElapsedEventArgs e)
         {
+            updater.Interval = 60000;
             checkStatus(streamName);
         }
         public void checkStatus(string streamName)
