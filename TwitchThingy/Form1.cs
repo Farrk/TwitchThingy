@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Timers;
 
 
 namespace TwitchThingy
@@ -18,61 +19,101 @@ namespace TwitchThingy
             InitializeComponent();
             StreamContainer.populateStreamsDictionary(listBox1);
             makeLabelsTransparent();
+            System.Timers.Timer UIrefresher = new System.Timers.Timer(10000);
+            UIrefresher.Elapsed += new ElapsedEventHandler(callUIRefresh);
+            UIrefresher.Enabled = true;
+            GC.KeepAlive(UIrefresher);
+        }
+        private void callUIRefresh(object source, ElapsedEventArgs e)
+        {
+            refreshUI();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             //todo vlc button
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             //web browser button
-            System.Diagnostics.Process.Start("http://twitch.tv/" + listBox1.SelectedItem.ToString());
+            //System.Diagnostics.Process.Start("http://twitch.tv/" + listBox1.SelectedItem.ToString());
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show(Convert.ToString(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].streamStatus));
-            System.Windows.Forms.MessageBox.Show(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].image_url_huge);
-            System.Windows.Forms.MessageBox.Show(Convert.ToString(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].channel_count));
+            try
+            {
+                System.Windows.Forms.MessageBox.Show(Convert.ToString(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].streamStatus));
+                System.Windows.Forms.MessageBox.Show(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].image_url_huge);
+                System.Windows.Forms.MessageBox.Show(Convert.ToString(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].channel_count));
+            
+            }
+            catch
+            {
+                System.Windows.Forms.MessageBox.Show("No stream selected.");
+            }
             //options button
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //StreamContainer.streamObjects.Add(listBox1.SelectedItem.ToString(),new Stream(listBox1.SelectedItem.ToString()));
-            pictureBox1.BorderStyle = BorderStyle.Fixed3D;
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            try
-            {
-                pictureBox1.Load(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].screen_cap_url_huge);
-                label7.Text = StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].status;
-                label4.Text = "Name:"+StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].streamName;
-                label5.Text = "Game:"+StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].meta_game;
-                label6.Text = "Viewers:"+Convert.ToString(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].channel_count);
-            }
-            catch
+            refreshUI();
+        }
+        private void refreshUI(){
+            string selectedItem="";
+            if (!InvokeRequired)
             {
                 try
                 {
-                    pictureBox1.Load(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].offline_image_url);
+                    selectedItem = listBox1.SelectedItem.ToString();
+                    pictureBox1.BorderStyle = BorderStyle.Fixed3D;
+                    pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                    if (StreamContainer.streamObjects[selectedItem].streamStatus == true)
+                    {
+                        try
+                        {
+                            pictureBox1.Load(StreamContainer.streamObjects[selectedItem].screen_cap_url_huge);
+                            label7.Text = StreamContainer.streamObjects[selectedItem].status;
+                            label4.Text = "Name:" + StreamContainer.streamObjects[selectedItem].streamName;
+                            label5.Text = "Game:" + StreamContainer.streamObjects[selectedItem].meta_game;
+                            label6.Text = "Viewers:" + Convert.ToString(StreamContainer.streamObjects[selectedItem].channel_count);
+
+                        }
+                        catch
+                        {
+                            System.Windows.Forms.MessageBox.Show("Stream is live but something went wrong.");
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            pictureBox1.Load(StreamContainer.streamObjects[selectedItem].offline_image_url);
+                        }
+                        catch
+                        {
+                            pictureBox1.Image = pictureBox1.ErrorImage;
+                        }
+                        label7.Text = StreamContainer.streamObjects[selectedItem].offline_status;
+                        label4.Text = "Name:" + StreamContainer.streamObjects[selectedItem].streamName;
+                        label5.Text = "Game:offline";
+                        label6.Text = "Viewers:-";
+                    }
                 }
                 catch
                 {
-                    pictureBox1.Image = pictureBox1.ErrorImage;
+
                 }
-                label7.Text = StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].offline_status;
-                label4.Text = "Name:" + StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].streamName;
-                label5.Text = "Game:offline";
-                label6.Text = "Viewers:-";
+            }
+            else
+            {
+                Invoke(new Action(refreshUI));
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
 
-        }
         private void makeLabelsTransparent()
         {
             var pos = this.PointToScreen(label1.Location);
@@ -116,6 +157,19 @@ namespace TwitchThingy
             label7.Parent = pictureBox1;
             label7.Location = pos;
             label7.BackColor = Color.Transparent;
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToBoolean(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].streamStatus))
+            {
+                System.Windows.Forms.MessageBox.Show(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].status, "Stream Title");
+            }
+            else
+            {
+                System.Windows.Forms.MessageBox.Show(StreamContainer.streamObjects[listBox1.SelectedItem.ToString()].offline_status, "Stream Title");
+            }
+            
         }
     }
 }
