@@ -18,6 +18,7 @@ namespace TwitchThingy
         }
         public MsgBox(string msg, string btn1, string btn2)
         {
+            InitializeComponent();
             label1.Text = msg;
             button1.Text = btn1;
             button2.Text = btn2;
