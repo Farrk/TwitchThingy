@@ -19,28 +19,47 @@ namespace TwitchThingy
 
         public static void populateStreamsDictionary(ListBox streamsList)
         {
-            string username="farrk";
+            string username = "pandawikshotgun";
+            int counter = 0;
+            int total = 0;
+            int offset = 0;
+            int i = 0;
             System.Net.WebClient wc = new System.Net.WebClient();
             try {
-                string webData = wc.DownloadString("https://api.twitch.tv/kraken/users/" + username + "/follows/channels?direction=DESC&limit=250&offset=0");
+                    string webData = wc.DownloadString("https://api.twitch.tv/kraken/users/" + username + "/follows/channels?direction=DESC&limit=250&offset=0");
                     JObject streams = JObject.Parse(webData);
-                    if ((int)streams["_total"] > 250)
+                    total = (int)streams["_total"];
+                    //while loop
+                    while (counter < total)
                     {
-                        streams["_total"] = 250;
-                    }
-                    for (int i = 0; i < (int)streams["_total"]; i++)
-                    {
+                        //System.Windows.Forms.MessageBox.Show(i + "/" + total);
                         string streamToAdd = (string)streams["follows"][i]["channel"]["name"];
-                        StreamContainer.streamObjects.Add(streamToAdd, new Stream(streamToAdd));
-                        StreamContainer.streamObjects[streamToAdd].offline_image_url = (string)streams["follows"][i]["channel"]["video_banner"];
-                        StreamContainer.streamObjects[streamToAdd].offline_status = (string)streams["follows"][i]["channel"]["status"];
+                        if (!streamObjects.ContainsKey(streamToAdd))
+                        {
+                            StreamContainer.streamObjects.Add(streamToAdd, new Stream(streamToAdd));
+                            StreamContainer.streamObjects[streamToAdd].offline_image_url = (string)streams["follows"][i]["channel"]["video_banner"];
+                            StreamContainer.streamObjects[streamToAdd].offline_status = (string)streams["follows"][i]["channel"]["status"];
+                        }
                         streamsList.Items.Add(streamToAdd);
+                        counter++;
+                        i++;
+                        if (i!=0 && i % 250 == 0)
+                        {
+                            System.Windows.Forms.MessageBox.Show("hurr");
+                            offset++;
+                            webData = wc.DownloadString("https://api.twitch.tv/kraken/users/" + username + "/follows/channels?direction=DESC&limit=250&offset="+250*offset);
+                            streams = JObject.Parse(webData);
+                            i = 0;
+                        }
+                        
                     }
+
+                    System.Windows.Forms.MessageBox.Show("Streams added:" + counter);
                     streamsList.SelectedIndex = 0;
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show(username+" does not exist.");
+                System.Windows.Forms.MessageBox.Show(username+" does not exist or follows no one.");
             }
         }
         public int getStreamsAmount()
