@@ -57,7 +57,7 @@ namespace TwitchThingy
                 meta_game = (string)streamData["channel"]["meta_game"];
                 screen_cap_url_huge = (string)streamData["channel"]["screen_cap_url_huge"];
                 image_url_huge = (string)streamData["channel"]["image_url_huge"];
-                status = (string)streamData["channel"]["status"];//(string)channelData["status"];
+                status = (string)streamData["channel"]["status"];
             }
         }
     }

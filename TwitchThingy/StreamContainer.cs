@@ -19,20 +19,20 @@ namespace TwitchThingy
 
         public static void populateStreamsDictionary(ListBox streamsList)
         {
-            string username = "pandawikshotgun";
+            string username = "farrk";
             int counter = 0;
             int total = 0;
             int offset = 0;
             int i = 0;
             System.Net.WebClient wc = new System.Net.WebClient();
-            try {
+            try 
+            {
+
                     string webData = wc.DownloadString("https://api.twitch.tv/kraken/users/" + username + "/follows/channels?direction=DESC&limit=250&offset=0");
                     JObject streams = JObject.Parse(webData);
                     total = (int)streams["_total"];
-                    //while loop
                     while (counter < total)
                     {
-                        //System.Windows.Forms.MessageBox.Show(i + "/" + total);
                         string streamToAdd = (string)streams["follows"][i]["channel"]["name"];
                         if (!streamObjects.ContainsKey(streamToAdd))
                         {
@@ -45,7 +45,6 @@ namespace TwitchThingy
                         i++;
                         if (i!=0 && i % 250 == 0)
                         {
-                            System.Windows.Forms.MessageBox.Show("hurr");
                             offset++;
                             webData = wc.DownloadString("https://api.twitch.tv/kraken/users/" + username + "/follows/channels?direction=DESC&limit=250&offset="+250*offset);
                             streams = JObject.Parse(webData);
@@ -54,12 +53,12 @@ namespace TwitchThingy
                         
                     }
 
-                    System.Windows.Forms.MessageBox.Show("Streams added:" + counter);
+                    //System.Windows.Forms.MessageBox.Show("Streams added:" + counter);
                     streamsList.SelectedIndex = 0;
             }
             catch
             {
-                System.Windows.Forms.MessageBox.Show(username+" does not exist or follows no one.");
+                //System.Windows.Forms.MessageBox.Show(username+" does not exist or follows no one.");
             }
         }
         public int getStreamsAmount()
