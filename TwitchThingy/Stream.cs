@@ -7,12 +7,14 @@ using System.Timers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace TwitchThingy
 {
     class Stream
     {
-        private static System.Timers.Timer updater;
+        public static System.Timers.Timer updater;
+        public System.Timers.Timer streamUpdater;
         public string streamName { get; set; } //login
         public bool streamStatus { get; set; } //in function
         public string meta_game { get; set; } // channel:meta_game
@@ -24,19 +26,40 @@ namespace TwitchThingy
         public string offline_status { get; set; }
         public Stream(string channel){
             streamName = channel;
-            updater = new System.Timers.Timer(1000);
-            updater.Elapsed += new ElapsedEventHandler(refreshStatus);
-            updater.Enabled = true;
-            //checkStatus(channel);
-            GC.KeepAlive(updater);
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = false;
+            bw.WorkerSupportsCancellation = false;
+            bw.DoWork += new DoWorkEventHandler(
+                delegate(object o, DoWorkEventArgs args)
+            {
+                BackgroundWorker b = o as BackgroundWorker;
+                checkStatus(streamName);
+                //System.Windows.Forms.MessageBox.Show(streamName + ":" + streamStatus);
+                bw.Dispose();
+            });
+            bw.RunWorkerAsync();
+            streamUpdater = new System.Timers.Timer(60000);
+            streamUpdater.Elapsed += new ElapsedEventHandler(refreshStatus);
+            streamUpdater.Enabled = true;
+        }
+        public void initUpdateTimer(object source, ElapsedEventArgs e)
+        {
+            checkStatus(streamName);
+
+            updater.Enabled = false;
+            updater.Dispose();
+            System.Windows.Forms.MessageBox.Show(streamName);
         }
         public void refreshStatus(object source, ElapsedEventArgs e)
         {
-            updater.Interval = 60000;
+            streamUpdater.Stop();
             checkStatus(streamName);
+            //System.Windows.Forms.MessageBox.Show(streamName);
+            streamUpdater.Start();
         }
         public void checkStatus(string streamName)
         {
+            //System.Windows.Forms.MessageBox.Show(streamName);
             string webData;
             System.Net.WebClient wc = new System.Net.WebClient();
             try
@@ -59,6 +82,7 @@ namespace TwitchThingy
                 image_url_huge = (string)streamData["channel"]["image_url_huge"];
                 status = (string)streamData["channel"]["status"];
             }
+            
         }
     }
 }

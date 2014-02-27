@@ -12,14 +12,22 @@ namespace TwitchThingy
     
     class StreamContainer
     {
-        public static Dictionary<string,Stream> streamObjects = new Dictionary<string,Stream>();
+        public static Dictionary<string, Stream> streamObjects= new Dictionary<string, Stream>();
         public StreamContainer(){
             
         }
 
         public static void populateStreamsDictionary(ListBox streamsList)
         {
-            string username = "farrk";
+            foreach (KeyValuePair<string, Stream> entry in streamObjects)
+            {
+                entry.Value.streamUpdater.Dispose();
+            }
+            streamObjects = new Dictionary<string, Stream>();
+            
+            streamsList.Items.Clear();
+            string username = SettingsContainer.appSettings.username;
+
             int counter = 0;
             int total = 0;
             int offset = 0;

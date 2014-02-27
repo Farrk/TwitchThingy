@@ -33,11 +33,13 @@
             this.button3 = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.axVLCPlugin21 = new AxAXVLC.AxVLCPlugin2();
             this.label7 = new TwitchThingy.CustomLabel();
             this.label4 = new TwitchThingy.CustomLabel();
             this.label5 = new TwitchThingy.CustomLabel();
             this.label6 = new TwitchThingy.CustomLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axVLCPlugin21)).BeginInit();
             this.SuspendLayout();
             // 
             // listBox1
@@ -86,6 +88,19 @@
             this.checkBox1.TabIndex = 12;
             this.checkBox1.Text = "Show offline?";
             this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // axVLCPlugin21
+            // 
+            this.axVLCPlugin21.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.axVLCPlugin21.Enabled = true;
+            this.axVLCPlugin21.Location = new System.Drawing.Point(173, 1);
+            this.axVLCPlugin21.Name = "axVLCPlugin21";
+            this.axVLCPlugin21.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axVLCPlugin21.OcxState")));
+            this.axVLCPlugin21.Size = new System.Drawing.Size(465, 304);
+            this.axVLCPlugin21.TabIndex = 13;
+            this.axVLCPlugin21.Visible = false;
             // 
             // label7
             // 
@@ -159,6 +174,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(639, 308);
+            this.Controls.Add(this.axVLCPlugin21);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
@@ -172,6 +188,7 @@
             this.Name = "Form1";
             this.Text = "SomeLivestreamingWebsiteThingy";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axVLCPlugin21)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -187,6 +204,7 @@
         private CustomLabel label6;
         private CustomLabel label7;
         private System.Windows.Forms.CheckBox checkBox1;
+        private AxAXVLC.AxVLCPlugin2 axVLCPlugin21;
     }
 }
 
